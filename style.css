@@ -106,15 +106,16 @@ select {
     background: white;
 }
 
+/* 📱 Responsive adjustments */
 @media (max-width: 768px) {
     .container {
-        max-width: 350px; 
+        max-width: 350px; /* Smaller for tablet */
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        max-width: 300px; 
+        max-width: 300px; /* Smaller for phone */
         padding: 15px;
     }
 
