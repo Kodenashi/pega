@@ -9,14 +9,12 @@
 <body>
 
 <div class="container">
-    <!-- Logo Placeholder -->
     <div style="text-align:center; margin-bottom:15px;">
         <img src="https://kodenashi.github.io/notes_generator/assets/logo.png" alt="Logo" style="max-width:120px;">
     </div>
 
     <h2>Pega Notes Generator</h2>
 
-    <!-- Pega Notes Form -->
     <form id="pegaForm">
         <label>CID:</label>
         <input type="text" id="cid" oninput="updatePreview()">
@@ -31,7 +29,11 @@
         <input type="text" id="name" oninput="updatePreview()">
 
         <label>AUTHENTICATED (Y/N):</label>
-        <input type="text" id="authenticated" oninput="updatePreview()">
+        <select id="authenticated" onchange="updatePreview()">
+            <option value="">-- Select --</option>
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+        </select>
 
         <label>DOMAIN:</label>
         <input type="text" id="domain" oninput="updatePreview()">
@@ -45,17 +47,24 @@
         <label>NEXT ACTION:</label>
         <textarea id="nextAction" oninput="updatePreview()"></textarea>
 
-        <label>OSAD (Y/N) REASON:</label>
-        <textarea id="osadReason" oninput="updatePreview()"></textarea>
+        <label>OSAD (Y/N):</label>
+        <select id="osadYN" onchange="toggleReason(); updatePreview()">
+            <option value="">-- Select --</option>
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+        </select>
+
+        <div id="reasonWrapper" style="display:none;">
+            <label>Reason:</label>
+            <textarea id="osadReason" placeholder="Reason..." oninput="updatePreview()"></textarea>
+        </div>
     </form>
 
-    <!-- Preview -->
     <div id="output" style="display:none;"></div>
 
-    <!-- Buttons -->
     <div style="display:flex; gap:10px; margin-top:10px;">
-        <button id="copyBtn" style="display:none;" onclick="copyNotes()">Copy to Clipboard</button>
-        <button id="resetBtn" style="display:none; background:#dc3545;" onclick="resetForm()">Reset</button>
+        <button id="copyBtn" style="display:none;" type="button" onclick="copyNotes()">Copy to Clipboard</button>
+        <button id="resetBtn" style="display:none; background:#dc3545;" type="button" onclick="resetForm()">Reset</button>
     </div>
 </div>
 
