@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Pega Notes Generator</title>
-<link rel="icon" type="image/png" href="https://kodenashi.github.io/pega/assets/favicon.ico">
+<link rel="icon" type="image/png" href="https://kodenashi.github.io/notes_generator/assets/favicon.ico">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
     <div style="text-align:center; margin-bottom:15px;">
-        <img src="https://kodenashi.github.io/pega/assets/pegalogo.png" alt="Logo" style="max-width:120px;">
+        <img src="https://kodenashi.github.io/notes_generator/assets/logo.png" alt="Logo" style="max-width:120px;">
     </div>
 
     <h2>Pega Notes Generator</h2>
@@ -55,8 +55,16 @@
         </select>
 
         <div id="reasonWrapper" style="display:none;">
-            <label>Reason:</label>
-            <textarea id="osadReason" placeholder="Reason..." oninput="updatePreview()"></textarea>
+            <label>Possible Reason:</label>
+            <select id="osadReasonDropdown" onchange="updatePreview()" style="display:none;">
+                <option value="">-- Select --</option>
+                <option value="Site Launch">Site Launch</option>
+                <option value="Website Issue">Website Issue</option>
+                <option value="SSL Issue">SSL Issue</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <textarea id="osadReasonText" placeholder="Reason..." oninput="updatePreview()" style="display:none;"></textarea>
         </div>
     </form>
 
