@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Note Generator — Updated Gradient</title>
+  <title>Note Generator — Compact Preview</title>
   <style>
     :root{
       --bg1: #eef8ff;
       --bg2: #f6fff6;
       --card-bg: rgba(255,255,255,0.96);
-      --accent-1: #89f7fe; /* updated */
-      --accent-2: #66a6ff; /* updated */
+      --accent-1: #89f7fe;
+      --accent-2: #66a6ff;
       --muted: #6b7280;
       --shadow: 0 10px 30px rgba(12,30,60,0.06);
       --radius: 12px;
@@ -18,7 +18,6 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
-    /* Page */
     body{
       min-height:100vh;
       margin:0;
@@ -30,26 +29,23 @@
       padding:18px;
     }
 
-    /* Layout: two-column, compact */
     .wrap{
       width:100%;
       max-width:var(--max-w);
       display:grid;
-      grid-template-columns: 1fr 420px; /* left form and right fixed preview */
+      grid-template-columns: 1fr 420px;
       gap:18px;
       align-items:start;
     }
 
-    /* Card containers */
     .card{
       background:var(--card-bg);
       border-radius:var(--radius);
-      padding:14px 16px;        /* reduced left padding so fields align with left edge */
+      padding:14px 16px;
       box-shadow:var(--shadow);
       border: 1px solid rgba(15,23,42,0.04);
     }
 
-    /* Header */
     .header {
       display:flex;
       align-items:center;
@@ -60,7 +56,7 @@
       width:44px;
       height:44px;
       border-radius:8px;
-      background: linear-gradient(135deg,var(--accent-1),var(--accent-2)); /* updated gradient */
+      background: linear-gradient(135deg,var(--accent-1),var(--accent-2));
       display:flex;
       align-items:center;
       justify-content:center;
@@ -69,36 +65,13 @@
       box-shadow: 0 6px 18px rgba(102,153,255,0.12);
       flex-shrink:0;
     }
-    h1{
-      margin:0;
-      font-size:18px;
-      letter-spacing:0.2px;
-    }
-    .sub {
-      font-size:12px;
-      color:var(--muted);
-      margin-top:4px;
-    }
+    h1{ margin:0; font-size:18px; letter-spacing:0.2px; }
+    .sub { font-size:12px; color:var(--muted); margin-top:4px; }
 
-    /* Compact single-column form */
-    form#noteForm {
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    form#noteForm { display:flex; flex-direction:column; gap:10px; }
 
-    .field {
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    label {
-      font-size:12px;
-      color:var(--muted);
-      margin:0;
-      padding-left:2px;
-    }
+    .field { display:flex; flex-direction:column; gap:6px; }
+    label { font-size:12px; color:var(--muted); margin:0; padding-left:2px; }
 
     input[type="text"], input[type="tel"], textarea, select {
       width:100%;
@@ -118,29 +91,12 @@
       transform: translateY(-1px);
     }
 
-    textarea {
-      min-height:72px;
-      resize:vertical;
-      padding-top:10px;
-    }
+    textarea { min-height:72px; resize:vertical; padding-top:10px; }
 
-    .two-inline {
-      display:flex;
-      gap:10px;
-    }
+    .two-inline { display:flex; gap:10px; }
     .two-inline .field { flex:1; }
 
-    .small {
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .controls {
-      display:flex;
-      gap:8px;
-      margin-top:6px;
-      align-items:center;
-    }
+    .controls { display:flex; gap:8px; margin-top:6px; align-items:center; }
 
     .btn {
       border:0;
@@ -148,7 +104,7 @@
       border-radius:8px;
       cursor:pointer;
       font-weight:700;
-      background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); /* updated gradient */
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
       color:white;
       box-shadow: 0 8px 20px rgba(102,153,255,0.12);
       font-size:13px;
@@ -162,13 +118,7 @@
       font-weight:700;
     }
 
-    /* Preview column */
-    .preview {
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      padding:12px;
-    }
+    .preview { display:flex; flex-direction:column; gap:12px; padding:12px; }
 
     .note {
       background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,255,0.98));
@@ -183,19 +133,9 @@
       overflow:auto;
     }
 
-    .muted {
-      color:var(--muted);
-      font-size:13px;
-    }
+    .muted { color:var(--muted); font-size:13px; }
+    .footer { margin-top:8px; font-size:12px; color:var(--muted); }
 
-    /* subtle footer */
-    .footer {
-      margin-top:8px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    /* Responsive: stack columns on small screens */
     @media (max-width:920px){
       .wrap { grid-template-columns: 1fr; }
       .note { min-height:260px; }
@@ -204,39 +144,36 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- LEFT: Compact form (no left space) -->
     <div class="card" aria-labelledby="formTitle">
       <div class="header">
         <div class="logo">NG</div>
         <div>
           <h1 id="formTitle">Note Generator</h1>
-          <div class="sub">Compact layout — fields aligned to the left edge</div>
+          <div class="sub">Compact layout — compact preview spacing</div>
         </div>
       </div>
 
       <form id="noteForm" autocomplete="off" onsubmit="return false;">
         <div class="field">
           <label for="cid">CID</label>
-          <input id="cid" name="cid" type="text"/>
+          <input id="cid" name="cid" type="text" placeholder="e.g. 12345" />
         </div>
 
         <div class="field">
           <label for="cprod">CPROD</label>
-          <input id="cprod" name="cprod" type="text"/>
+          <input id="cprod" name="cprod" type="text" placeholder="Product code or name" />
         </div>
 
-        <div class="two-inline">
           <div class="field">
             <label for="phone">PHONE#</label>
-            <input id="phone" name="phone" type="tel"/>
+            <input id="phone" name="phone" type="tel" placeholder="(555) 123-4567" />
           </div>
           <div class="field">
             <label for="name">NAME</label>
-            <input id="name" name="name" type="text"/>
+            <input id="name" name="name" type="text" placeholder="Agent or customer name" />
           </div>
-        </div>
 
-        <div class="two-inline">
+
           <div class="field">
             <label for="authenticated">AUTHENTICATED (Y/N)</label>
             <select id="authenticated" name="authenticated" aria-label="Authenticated">
@@ -248,9 +185,8 @@
 
           <div class="field">
             <label for="domain">DOMAIN</label>
-            <input id="domain" name="domain" type="text"/>
+            <input id="domain" name="domain" type="text" placeholder="example.com" />
           </div>
-        </div>
 
         <div class="field">
           <label for="concern">CONCERN</label>
@@ -264,7 +200,7 @@
 
         <div class="field">
           <label for="nextAction">NEXT ACTION</label>
-          <textarea id="nextAction" name="nextAction"></textarea>
+          <textarea id="nextAction" name="nextAction" placeholder="Next steps..."></textarea>
         </div>
 
         <div class="two-inline" style="align-items:end;">
@@ -277,7 +213,6 @@
             </select>
           </div>
 
-          <!-- Container for OSAD extra fields (stays in form flow, appears when needed) -->
           <div id="osadExtrasFlow" style="display:flex;flex-direction:column;gap:6px;">
             <div id="osadReasonWrapper" style="display:none;">
               <label for="osadReason">REASON</label>
@@ -307,7 +242,6 @@
       </form>
     </div>
 
-    <!-- RIGHT: Preview -->
     <div class="card preview" aria-labelledby="previewTitle">
       <div class="header" style="margin-bottom:6px;">
         <h1 id="previewTitle" style="font-size:16px;margin:0">Realtime Preview</h1>
@@ -322,7 +256,7 @@
   </div>
 
   <script>
-    // escape HTML for safe preview text
+    // Escape HTML for safe preview text
     function esc(s){
       return String(s || "").replace(/[&<>"']/g, function(m){
         return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m];
@@ -351,7 +285,7 @@
       resetBtn: document.getElementById('resetBtn')
     };
 
-    // Show/hide OSAD reason and other fields
+    // OSAD UI logic
     function updateOsadVisibility(){
       const v = fields.osad.value;
       if(v === 'Y'){
@@ -359,23 +293,23 @@
       } else {
         fields.osadReasonWrapper.style.display = 'none';
         fields.osadOtherWrapper.style.display = 'none';
-        fields.osadReason.value = '';
-        fields.osadOther.value = '';
+        if(fields.osadReason) fields.osadReason.value = '';
+        if(fields.osadOther) fields.osadOther.value = '';
       }
       updatePreview();
     }
 
     function updateOsadReason(){
-      if(fields.osadReason.value === 'Other'){
+      if(fields.osadReason && fields.osadReason.value === 'Other'){
         fields.osadOtherWrapper.style.display = 'block';
       } else {
         fields.osadOtherWrapper.style.display = 'none';
-        fields.osadOther.value = '';
+        if(fields.osadOther) fields.osadOther.value = '';
       }
       updatePreview();
     }
 
-    // Build preview text
+    // Build compact preview text WITHOUT extra blank lines
     function buildPreview(){
       const v = {
         cid: fields.cid.value.trim(),
@@ -392,7 +326,7 @@
         osadOther: fields.osadOther ? fields.osadOther.value.trim() : ''
       };
 
-      // OSAD line formatting
+      // Format OSAD line compactly
       let osadLine = 'OSAD: ';
       if(v.osad === 'Y'){
         osadLine += 'Y';
@@ -405,8 +339,11 @@
         }
       } else if(v.osad === 'N'){
         osadLine += 'N';
+      } else {
+        osadLine += '';
       }
 
+      // Compose lines without blank separators
       const lines = [
         'CID: ' + esc(v.cid),
         'CPROD: ' + esc(v.cprod),
@@ -414,23 +351,16 @@
         'NAME: ' + esc(v.name),
         'AUTHENTICATED (Y/N): ' + esc(v.authenticated),
         'DOMAIN: ' + esc(v.domain),
-        '',
-        'CONCERN:',
-        esc(v.concern || ''),
-        '',
-        'ACTION DONE:',
-        esc(v.actionDone || ''),
-        '',
-        'NEXT ACTION:',
-        esc(v.nextAction || ''),
-        '',
+        'CONCERN: ' + esc(v.concern || ''),
+        'ACTION DONE: ' + esc(v.actionDone || ''),
+        'NEXT ACTION: ' + esc(v.nextAction || ''),
         osadLine
       ];
 
       return lines.join('\n');
     }
 
-    // Update preview element
+    // Update preview DOM
     function updatePreview(){
       fields.notePreview.textContent = buildPreview();
     }
@@ -445,30 +375,27 @@
       el.addEventListener('change', updatePreview);
     });
 
-    fields.osad.addEventListener('change', updateOsadVisibility);
+    if(fields.osad) fields.osad.addEventListener('change', updateOsadVisibility);
     if(fields.osadReason){
       fields.osadReason.addEventListener('change', updateOsadReason);
       fields.osadReason.addEventListener('input', updatePreview);
     }
-    if(fields.osadOther){
-      fields.osadOther.addEventListener('input', updatePreview);
-    }
+    if(fields.osadOther) fields.osadOther.addEventListener('input', updatePreview);
 
     // Copy preview
     fields.copyBtn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(buildPreview());
+        const orig = fields.copyBtn.textContent;
         fields.copyBtn.textContent = 'Copied!';
-        setTimeout(()=> fields.copyBtn.textContent = 'Copy Preview', 1400);
+        setTimeout(()=> fields.copyBtn.textContent = orig, 1400);
       } catch(e){
-        // fallback
         const tmp = document.createElement('textarea');
         tmp.value = buildPreview();
         document.body.appendChild(tmp);
         tmp.select();
-        try { document.execCommand('copy'); fields.copyBtn.textContent = 'Copied!'; } catch(e){}
+        try { document.execCommand('copy'); } catch(e){}
         tmp.remove();
-        setTimeout(()=> fields.copyBtn.textContent = 'Copy Preview', 1400);
       }
     });
 
@@ -480,7 +407,7 @@
       updatePreview();
     });
 
-    // initialize preview
+    // initialize
     updatePreview();
   </script>
 </body>
