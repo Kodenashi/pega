@@ -3,190 +3,151 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Note Generator — Compact Preview</title>
+  <title>Compact Note Generator — Footer Controls</title>
   <style>
     :root{
-      --bg1: #eef8ff;
-      --bg2: #f6fff6;
-      --card-bg: rgba(255,255,255,0.96);
-      --accent-1: #89f7fe;
-      --accent-2: #66a6ff;
-      --muted: #6b7280;
-      --shadow: 0 10px 30px rgba(12,30,60,0.06);
-      --radius: 12px;
-      --max-w: 1100px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --accent-a: #bff0ff;
+      --accent-b: #dfe9ff;
+      --muted: #54606f;
+      --card: rgba(255,255,255,0.94);
+      --radius: 8px;
+      --shadow: 0 8px 20px rgba(18,38,63,0.06);
+      --maxw: 980px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
-    body{
-      min-height:100vh;
+    html,body{
+      height:100%;
       margin:0;
+      background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
       display:flex;
       align-items:center;
       justify-content:center;
-      background: linear-gradient(135deg,var(--bg2) 0%, var(--bg1) 60%);
-      color:#0f172a;
-      padding:18px;
+      padding:10px;
+      color:#071129;
+    }
+    label {
+      font-weight:bold;
     }
 
-    .wrap{
+    .shell{
       width:100%;
-      max-width:var(--max-w);
+      max-width:var(--maxw);
       display:grid;
-      grid-template-columns: 1fr 420px;
-      gap:18px;
+      grid-template-columns: 1fr 380px;
+      gap:12px;
       align-items:start;
     }
 
     .card{
-      background:var(--card-bg);
+      background: var(--card);
       border-radius:var(--radius);
-      padding:14px 16px;
       box-shadow:var(--shadow);
-      border: 1px solid rgba(15,23,42,0.04);
+      border:1px solid rgba(12,20,30,0.06);
     }
 
-    .header {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
+    .form-card{ padding:10px 12px; }
+    .preview-card{ padding:8px 10px; display:flex; flex-direction:column; min-height:320px; }
+
+    .title-row{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .logo{ width:36px; height:36px; border-radius:6px; background:linear-gradient(135deg,var(--accent-a),var(--accent-b)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700 }
+    h1{ font-size:16px; margin:0 }
+    .hint{ font-size:12px; color:var(--muted); margin-top:4px }
+
+    form{ display:flex; flex-direction:column; gap:8px }
+    .field{ display:flex; flex-direction:column; gap:4px }
+    label{ font-size:12px; color:var(--muted); margin:0 }
+    input[type="text"], input[type="tel"], select, textarea{
+      font-size:13px; padding:8px 9px; border-radius:7px; border:1px solid rgba(10,20,30,0.06); outline:none;
+      background:#fff; box-sizing:border-box;
     }
-    .logo {
-      width:44px;
-      height:44px;
-      border-radius:8px;
-      background: linear-gradient(135deg,var(--accent-1),var(--accent-2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:700;
-      box-shadow: 0 6px 18px rgba(102,153,255,0.12);
-      flex-shrink:0;
-    }
-    h1{ margin:0; font-size:18px; letter-spacing:0.2px; }
-    .sub { font-size:12px; color:var(--muted); margin-top:4px; }
+    input:focus,textarea:focus,select:focus{ box-shadow:0 10px 30px rgba(102,166,255,0.08); border-color:rgba(102,166,255,0.4) }
+    textarea{ min-height:64px; resize:vertical; font-size:13px; padding-top:9px }
 
-    form#noteForm { display:flex; flex-direction:column; gap:10px; }
+    .row2{ display:flex; gap:8px }
+    .row2 .field{ flex:1 }
 
-    .field { display:flex; flex-direction:column; gap:6px; }
-    label { font-size:12px; color:var(--muted); margin:0; padding-left:2px; }
+    .preview-header{ display:flex; align-items:center; gap:8px; justify-content:space-between; margin-bottom:8px }
+    .preview-controls{ display:flex; gap:6px; align-items:center }
+    .btn{ padding:7px 10px; border-radius:7px; border:0; font-weight:700; color:white; background:linear-gradient(90deg,var(--accent-a),var(--accent-b)); cursor:pointer; font-size:13px }
+    .btn.ghost{ background:transparent; color:var(--muted); border:1px solid rgba(10,20,30,0.06) }
+    .btn.small{ padding:6px 8px; font-size:12px }
 
-    input[type="text"], input[type="tel"], textarea, select {
-      width:100%;
-      border-radius:8px;
-      border:1px solid rgba(2,6,23,0.06);
-      padding:9px 10px;
-      font-size:14px;
-      background:white;
-      box-sizing:border-box;
-      outline:none;
-      transition:box-shadow .12s, border-color .12s, transform .06s;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      box-shadow: 0 10px 30px rgba(102,166,255,0.09);
-      border-color: rgba(102,166,255,0.5);
-      transform: translateY(-1px);
-    }
-
-    textarea { min-height:72px; resize:vertical; padding-top:10px; }
-
-    .two-inline { display:flex; gap:10px; }
-    .two-inline .field { flex:1; }
-
-    .controls { display:flex; gap:8px; margin-top:6px; align-items:center; }
-
-    .btn {
-      border:0;
-      padding:9px 12px;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:700;
-      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
-      color:white;
-      box-shadow: 0 8px 20px rgba(102,153,255,0.12);
-      font-size:13px;
-    }
-
-    .btn.secondary {
-      background:transparent;
-      color:var(--muted);
-      border:1px solid rgba(2,6,23,0.06);
-      box-shadow:none;
-      font-weight:700;
-    }
-
-    .preview { display:flex; flex-direction:column; gap:12px; padding:12px; }
-
-    .note {
+    /* preview content stretches; footer sits at bottom */
+    .note{
       background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,255,0.98));
-      padding:14px;
-      border-radius:10px;
-      border: 1px solid rgba(2,6,23,0.04);
-      min-height:420px;
-      white-space:pre-wrap;
-      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
-      font-size:14px;
-      color:#0b1220;
-      overflow:auto;
+      border-radius:7px; padding:10px; font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      font-size:13px; color:#071129; white-space:pre-wrap; overflow:auto;
+      flex:1; min-height:180px;
     }
 
-    .muted { color:var(--muted); font-size:13px; }
-    .footer { margin-top:8px; font-size:12px; color:var(--muted); }
+    .preview-footer{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:10px;
+      align-items:center;
+    }
 
-    @media (max-width:920px){
-      .wrap { grid-template-columns: 1fr; }
-      .note { min-height:260px; }
+    .muted{ color:var(--muted); font-size:12px }
+
+    @media (max-width:900px){
+      .shell{ grid-template-columns: 1fr; }
+      .preview-card{ order:2 }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card" aria-labelledby="formTitle">
-      <div class="header">
+  <div class="shell">
+    <!-- FORM -->
+    <div class="card form-card" aria-labelledby="formTitle">
+      <div class="title-row">
         <div class="logo">NG</div>
         <div>
           <h1 id="formTitle">Note Generator</h1>
-          <div class="sub">Compact layout — compact preview spacing</div>
+          <div class="hint">Compact layout — preview footer controls</div>
         </div>
       </div>
 
       <form id="noteForm" autocomplete="off" onsubmit="return false;">
-        <div class="field">
-          <label for="cid">CID</label>
-          <input id="cid" name="cid" type="text"/>
+        <div class="row2">
+          <div class="field">
+            <label for="cid">CID</label>
+            <input id="cid" name="cid" type="text">
+          </div>
+          <div class="field">
+            <label for="cprod">CPROD</label>
+            <input id="cprod" name="cprod" type="text">
+          </div>
         </div>
 
-        <div class="field">
-          <label for="cprod">CPROD</label>
-          <input id="cprod" name="cprod" type="text"/>
-        </div>
-
+        <div class="row2">
           <div class="field">
             <label for="phone">PHONE#</label>
-            <input id="phone" name="phone" type="tel"/>
+            <input id="phone" name="phone" type="tel">
           </div>
           <div class="field">
             <label for="name">NAME</label>
-            <input id="name" name="name" type="text"/>
+            <input id="name" name="name" type="text">
           </div>
+        </div>
 
-
+        <div class="row2">
           <div class="field">
             <label for="authenticated">AUTHENTICATED (Y/N)</label>
             <select id="authenticated" name="authenticated" aria-label="Authenticated">
-              <option value="">-- select --</option>
+              <option value="">--Select--</option>
               <option value="Y">Y</option>
               <option value="N">N</option>
             </select>
           </div>
-
           <div class="field">
             <label for="domain">DOMAIN</label>
-            <input id="domain" name="domain" type="text"/>
+            <input id="domain" name="domain" type="text">
           </div>
+        </div>
 
         <div class="field">
           <label for="concern">CONCERN</label>
@@ -203,21 +164,21 @@
           <textarea id="nextAction" name="nextAction"></textarea>
         </div>
 
-        <div class="two-inline" style="align-items:end;">
-          <div class="field" style="margin-bottom:0;">
+        <div class="row2" style="align-items:flex-end">
+          <div class="field" style="margin-bottom:0">
             <label for="osad">OSAD (Y/N)</label>
             <select id="osad" name="osad" aria-label="OSAD">
-              <option value="">-- select --</option>
+              <option value="">--Select--</option>
               <option value="Y">Y</option>
               <option value="N">N</option>
             </select>
           </div>
 
-          <div id="osadExtrasFlow" style="display:flex;flex-direction:column;gap:6px;">
-            <div id="osadReasonWrapper" style="display:none;">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div id="osadReasonWrap" style="display:none">
               <label for="osadReason">REASON</label>
               <select id="osadReason" name="osadReason">
-                <option value="">-- select reason --</option>
+                <option value="">—</option>
                 <option value="Site Launch">Site Launch</option>
                 <option value="Website Issue">Website Issue</option>
                 <option value="SSL">SSL</option>
@@ -225,47 +186,42 @@
                 <option value="Other">Other</option>
               </select>
             </div>
-
-            <div id="osadOtherWrapper" style="display:none;">
-              <label for="osadOther">REASON - OTHER (explain)</label>
-              <textarea id="osadOther" name="osadOther" placeholder="Explain other reason..."></textarea>
+            <div id="osadOtherWrap" style="display:none">
+              <label for="osadOther">OTHER (explain)</label>
+              <textarea id="osadOther" name="osadOther" placeholder="Explain other reason..." style="min-height:58px"></textarea>
             </div>
           </div>
         </div>
 
-        <div class="controls">
-          <button class="btn" id="copyBtn" type="button" title="Copy preview to clipboard">Copy Preview</button>
-          <button class="btn secondary" id="resetBtn" type="button">Reset</button>
-          <div style="flex:1"></div>
-          <div class="small muted">Realtime preview updates as you type →</div>
-        </div>
       </form>
     </div>
 
-    <div class="card preview" aria-labelledby="previewTitle">
-      <div class="header" style="margin-bottom:6px;">
-        <h1 id="previewTitle" style="font-size:16px;margin:0">Realtime Preview</h1>
+    <!-- PREVIEW -->
+    <div class="card preview-card" aria-labelledby="previewTitle">
+      <div class="preview-header">
+        <div>
+          <h1 id="previewTitle" style="font-size:15px;margin:0">Realtime Preview</h1>
+          <div class="muted" style="margin-top:4px;font-size:12px">Stacked identifiers + compact output</div>
+        </div>
+
+        <!-- header area intentionally left minimal -->
+        <div style="width:1px"></div>
       </div>
 
-      <div id="notePreview" class="note" aria-live="polite">
-        -- Your note will appear here as you type --
-      </div>
+      <div id="notePreview" class="note" aria-live="polite">-- Your note will appear here --</div>
 
-      <div class="footer muted">Tip: Use "Copy Preview" to copy the generated note. Reset clears the form.</div>
+      <div class="preview-footer" role="region" aria-label="Preview actions">
+        <button id="copyBtn" class="btn small" title="Copy preview">Copy</button>
+        <button id="resetBtn" class="btn ghost small" title="Reset form">Reset</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // Escape HTML for safe preview text
-    function esc(s){
-      return String(s || "").replace(/[&<>"']/g, function(m){
-        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m];
-      });
-    }
+    function esc(s){ return String(s || '').replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
 
-    // Elements
-    const form = document.getElementById('noteForm');
-    const fields = {
+    const els = {
+      form: document.getElementById('noteForm'),
       cid: document.getElementById('cid'),
       cprod: document.getElementById('cprod'),
       phone: document.getElementById('phone'),
@@ -276,65 +232,64 @@
       actionDone: document.getElementById('actionDone'),
       nextAction: document.getElementById('nextAction'),
       osad: document.getElementById('osad'),
-      osadReasonWrapper: document.getElementById('osadReasonWrapper'),
+      osadReasonWrap: document.getElementById('osadReasonWrap'),
       osadReason: document.getElementById('osadReason'),
-      osadOtherWrapper: document.getElementById('osadOtherWrapper'),
+      osadOtherWrap: document.getElementById('osadOtherWrap'),
       osadOther: document.getElementById('osadOther'),
       notePreview: document.getElementById('notePreview'),
       copyBtn: document.getElementById('copyBtn'),
       resetBtn: document.getElementById('resetBtn')
     };
 
-    // OSAD UI logic
-    function updateOsadVisibility(){
-      const v = fields.osad.value;
-      if(v === 'Y'){
-        fields.osadReasonWrapper.style.display = 'block';
-      } else {
-        fields.osadReasonWrapper.style.display = 'none';
-        fields.osadOtherWrapper.style.display = 'none';
-        if(fields.osadReason) fields.osadReason.value = '';
-        if(fields.osadOther) fields.osadOther.value = '';
-      }
-      updatePreview();
+    function handleOsadChange(){
+      if(els.osad.value === 'Y'){ els.osadReasonWrap.style.display = 'block'; }
+      else { els.osadReasonWrap.style.display = 'none'; els.osadOtherWrap.style.display='none'; if(els.osadReason) els.osadReason.value=''; if(els.osadOther) els.osadOther.value=''; }
+      render();
     }
 
-    function updateOsadReason(){
-      if(fields.osadReason && fields.osadReason.value === 'Other'){
-        fields.osadOtherWrapper.style.display = 'block';
-      } else {
-        fields.osadOtherWrapper.style.display = 'none';
-        if(fields.osadOther) fields.osadOther.value = '';
-      }
-      updatePreview();
+    function handleReasonChange(){
+      if(els.osadReason && els.osadReason.value === 'Other'){ els.osadOtherWrap.style.display = 'block'; }
+      else { els.osadOtherWrap.style.display = 'none'; if(els.osadOther) els.osadOther.value=''; }
+      render();
     }
 
-    // Build compact preview text WITHOUT extra blank lines
-    function buildPreview(){
+    function buildPreviewText(){
       const v = {
-        cid: fields.cid.value.trim(),
-        cprod: fields.cprod.value.trim(),
-        phone: fields.phone.value.trim(),
-        name: fields.name.value.trim(),
-        authenticated: fields.authenticated.value.trim(),
-        domain: fields.domain.value.trim(),
-        concern: fields.concern.value.trim(),
-        actionDone: fields.actionDone.value.trim(),
-        nextAction: fields.nextAction.value.trim(),
-        osad: fields.osad.value.trim(),
-        osadReason: fields.osadReason ? fields.osadReason.value.trim() : '',
-        osadOther: fields.osadOther ? fields.osadOther.value.trim() : ''
+        cid: els.cid.value.trim(),
+        cprod: els.cprod.value.trim(),
+        phone: els.phone.value.trim(),
+        name: els.name.value.trim(),
+        auth: els.authenticated.value.trim(),
+        domain: els.domain.value.trim(),
+        concern: els.concern.value.trim(),
+        action: els.actionDone.value.trim(),
+        next: els.nextAction.value.trim(),
+        osad: els.osad.value.trim(),
+        reason: els.osadReason ? els.osadReason.value.trim() : '',
+        other: els.osadOther ? els.osadOther.value.trim() : ''
       };
 
-      // Format OSAD line compactly
+      const idLines = [];
+      idLines.push('CID: ' + esc(v.cid));
+      idLines.push('CPROD: ' + esc(v.cprod));
+      idLines.push('PHONE#: ' + esc(v.phone));
+      idLines.push('NAME: ' + esc(v.name));
+
+      const line2Parts = [];
+      line2Parts.push('AUTHENTICATED (Y/N): ' + esc(v.auth || ''));
+      if(v.domain) line2Parts.push('DOMAIN: ' + esc(v.domain));
+      const authDomainLine = line2Parts.join(' • ');
+
+      const concernLine = 'CONCERN: ' + esc(v.concern || '');
+      const actionLine  = 'ACTION DONE: ' + esc(v.action || '');
+      const nextLine    = 'NEXT ACTION: ' + esc(v.next || '');
+
       let osadLine = 'OSAD: ';
       if(v.osad === 'Y'){
         osadLine += 'Y';
-        if(v.osadReason){
-          osadLine += ' (' + v.osadReason;
-          if(v.osadReason === 'Other' && v.osadOther){
-            osadLine += ' - ' + v.osadOther;
-          }
+        if(v.reason){
+          osadLine += ' (' + esc(v.reason);
+          if(v.reason === 'Other' && v.other) osadLine += ' - ' + esc(v.other);
           osadLine += ')';
         }
       } else if(v.osad === 'N'){
@@ -343,72 +298,55 @@
         osadLine += '';
       }
 
-      // Compose lines without blank separators
-      const lines = [
-        'CID: ' + esc(v.cid),
-        'CPROD: ' + esc(v.cprod),
-        'PHONE#: ' + esc(v.phone),
-        'NAME: ' + esc(v.name),
-        'AUTHENTICATED (Y/N): ' + esc(v.authenticated),
-        'DOMAIN: ' + esc(v.domain),
-        'CONCERN: ' + esc(v.concern || ''),
-        'ACTION DONE: ' + esc(v.actionDone || ''),
-        'NEXT ACTION: ' + esc(v.nextAction || ''),
-        osadLine
-      ];
+      const pieces = [];
+      pieces.push(...idLines);
+      if(authDomainLine) pieces.push(authDomainLine);
+      pieces.push(concernLine);
+      pieces.push(actionLine);
+      pieces.push(nextLine);
+      pieces.push(osadLine);
 
-      return lines.join('\n');
+      return pieces.join('\n');
     }
 
-    // Update preview DOM
-    function updatePreview(){
-      fields.notePreview.textContent = buildPreview();
-    }
+    function render(){ els.notePreview.textContent = buildPreviewText(); }
 
-    // Attach listeners
-    [
-      fields.cid, fields.cprod, fields.phone, fields.name, fields.authenticated,
-      fields.domain, fields.concern, fields.actionDone, fields.nextAction
-    ].forEach(el => {
-      if(!el) return;
-      el.addEventListener('input', updatePreview);
-      el.addEventListener('change', updatePreview);
+    ['input','change'].forEach(ev => {
+      [els.cid, els.cprod, els.phone, els.name, els.authenticated, els.domain, els.concern, els.actionDone, els.nextAction].forEach(el=>{
+        if(el) el.addEventListener(ev, render);
+      });
     });
 
-    if(fields.osad) fields.osad.addEventListener('change', updateOsadVisibility);
-    if(fields.osadReason){
-      fields.osadReason.addEventListener('change', updateOsadReason);
-      fields.osadReason.addEventListener('input', updatePreview);
-    }
-    if(fields.osadOther) fields.osadOther.addEventListener('input', updatePreview);
+    if(els.osad) els.osad.addEventListener('change', handleOsadChange);
+    if(els.osadReason) els.osadReason.addEventListener('change', handleReasonChange);
+    if(els.osadOther) els.osadOther.addEventListener('input', render);
 
-    // Copy preview
-    fields.copyBtn.addEventListener('click', async () => {
+    els.copyBtn.addEventListener('click', async ()=>{
+      const text = buildPreviewText();
       try {
-        await navigator.clipboard.writeText(buildPreview());
-        const orig = fields.copyBtn.textContent;
-        fields.copyBtn.textContent = 'Copied!';
-        setTimeout(()=> fields.copyBtn.textContent = orig, 1400);
+        await navigator.clipboard.writeText(text);
+        const orig = els.copyBtn.textContent;
+        els.copyBtn.textContent = 'Copied';
+        setTimeout(()=> els.copyBtn.textContent = orig, 1200);
       } catch(e){
-        const tmp = document.createElement('textarea');
-        tmp.value = buildPreview();
-        document.body.appendChild(tmp);
-        tmp.select();
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
         try { document.execCommand('copy'); } catch(e){}
-        tmp.remove();
+        ta.remove();
       }
     });
 
-    // Reset
-    fields.resetBtn.addEventListener('click', ()=>{
-      form.reset();
-      updateOsadVisibility();
-      updateOsadReason();
-      updatePreview();
+    els.resetBtn.addEventListener('click', ()=>{
+      els.form.reset();
+      handleOsadChange();
+      handleReasonChange();
+      render();
     });
 
     // initialize
-    updatePreview();
+    render();
   </script>
 </body>
 </html>
