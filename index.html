@@ -1,81 +1,487 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Pega Notes Generator</title>
-<link rel="icon" type="image/png" href="https://kodenashi.github.io/pega/assets/favicon.ico">
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Note Generator — Updated Gradient</title>
+  <style>
+    :root{
+      --bg1: #eef8ff;
+      --bg2: #f6fff6;
+      --card-bg: rgba(255,255,255,0.96);
+      --accent-1: #89f7fe; /* updated */
+      --accent-2: #66a6ff; /* updated */
+      --muted: #6b7280;
+      --shadow: 0 10px 30px rgba(12,30,60,0.06);
+      --radius: 12px;
+      --max-w: 1100px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Page */
+    body{
+      min-height:100vh;
+      margin:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg,var(--bg2) 0%, var(--bg1) 60%);
+      color:#0f172a;
+      padding:18px;
+    }
+
+    /* Layout: two-column, compact */
+    .wrap{
+      width:100%;
+      max-width:var(--max-w);
+      display:grid;
+      grid-template-columns: 1fr 420px; /* left form and right fixed preview */
+      gap:18px;
+      align-items:start;
+    }
+
+    /* Card containers */
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      padding:14px 16px;        /* reduced left padding so fields align with left edge */
+      box-shadow:var(--shadow);
+      border: 1px solid rgba(15,23,42,0.04);
+    }
+
+    /* Header */
+    .header {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .logo {
+      width:44px;
+      height:44px;
+      border-radius:8px;
+      background: linear-gradient(135deg,var(--accent-1),var(--accent-2)); /* updated gradient */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      box-shadow: 0 6px 18px rgba(102,153,255,0.12);
+      flex-shrink:0;
+    }
+    h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:0.2px;
+    }
+    .sub {
+      font-size:12px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    /* Compact single-column form */
+    form#noteForm {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .field {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    label {
+      font-size:12px;
+      color:var(--muted);
+      margin:0;
+      padding-left:2px;
+    }
+
+    input[type="text"], input[type="tel"], textarea, select {
+      width:100%;
+      border-radius:8px;
+      border:1px solid rgba(2,6,23,0.06);
+      padding:9px 10px;
+      font-size:14px;
+      background:white;
+      box-sizing:border-box;
+      outline:none;
+      transition:box-shadow .12s, border-color .12s, transform .06s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      box-shadow: 0 10px 30px rgba(102,166,255,0.09);
+      border-color: rgba(102,166,255,0.5);
+      transform: translateY(-1px);
+    }
+
+    textarea {
+      min-height:72px;
+      resize:vertical;
+      padding-top:10px;
+    }
+
+    .two-inline {
+      display:flex;
+      gap:10px;
+    }
+    .two-inline .field { flex:1; }
+
+    .small {
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .controls {
+      display:flex;
+      gap:8px;
+      margin-top:6px;
+      align-items:center;
+    }
+
+    .btn {
+      border:0;
+      padding:9px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); /* updated gradient */
+      color:white;
+      box-shadow: 0 8px 20px rgba(102,153,255,0.12);
+      font-size:13px;
+    }
+
+    .btn.secondary {
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(2,6,23,0.06);
+      box-shadow:none;
+      font-weight:700;
+    }
+
+    /* Preview column */
+    .preview {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding:12px;
+    }
+
+    .note {
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,255,0.98));
+      padding:14px;
+      border-radius:10px;
+      border: 1px solid rgba(2,6,23,0.04);
+      min-height:420px;
+      white-space:pre-wrap;
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+      font-size:14px;
+      color:#0b1220;
+      overflow:auto;
+    }
+
+    .muted {
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* subtle footer */
+    .footer {
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* Responsive: stack columns on small screens */
+    @media (max-width:920px){
+      .wrap { grid-template-columns: 1fr; }
+      .note { min-height:260px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <!-- LEFT: Compact form (no left space) -->
+    <div class="card" aria-labelledby="formTitle">
+      <div class="header">
+        <div class="logo">NG</div>
+        <div>
+          <h1 id="formTitle">Note Generator</h1>
+          <div class="sub">Compact layout — fields aligned to the left edge</div>
+        </div>
+      </div>
 
-<div class="container">
-    <div style="text-align:center; margin-bottom:15px;">
-        <img src="https://kodenashi.github.io/pega/assets/pegalogo.png" alt="Logo" style="max-width:120px;">
-    </div>
+      <form id="noteForm" autocomplete="off" onsubmit="return false;">
+        <div class="field">
+          <label for="cid">CID</label>
+          <input id="cid" name="cid" type="text"/>
+        </div>
 
-    <h2>Pega Notes Generator</h2>
+        <div class="field">
+          <label for="cprod">CPROD</label>
+          <input id="cprod" name="cprod" type="text"/>
+        </div>
 
-    <form id="pegaForm">
-        <label>CID:</label>
-        <input type="text" id="cid" oninput="updatePreview()">
+        <div class="two-inline">
+          <div class="field">
+            <label for="phone">PHONE#</label>
+            <input id="phone" name="phone" type="tel"/>
+          </div>
+          <div class="field">
+            <label for="name">NAME</label>
+            <input id="name" name="name" type="text"/>
+          </div>
+        </div>
 
-        <label>CPROD:</label>
-        <input type="text" id="cprod" oninput="updatePreview()">
+        <div class="two-inline">
+          <div class="field">
+            <label for="authenticated">AUTHENTICATED (Y/N)</label>
+            <select id="authenticated" name="authenticated" aria-label="Authenticated">
+              <option value="">-- select --</option>
+              <option value="Y">Y</option>
+              <option value="N">N</option>
+            </select>
+          </div>
 
-        <label>PHONE#:</label>
-        <input type="text" id="phone" oninput="updatePreview()">
+          <div class="field">
+            <label for="domain">DOMAIN</label>
+            <input id="domain" name="domain" type="text"/>
+          </div>
+        </div>
 
-        <label>NAME:</label>
-        <input type="text" id="name" oninput="updatePreview()">
+        <div class="field">
+          <label for="concern">CONCERN</label>
+          <textarea id="concern" name="concern" placeholder="Describe the concern..."></textarea>
+        </div>
 
-        <label>AUTHENTICATED (Y/N):</label>
-        <select id="authenticated" onchange="updatePreview()">
-            <option value="">-- Select --</option>
-            <option value="Y">Y</option>
-            <option value="N">N</option>
-        </select>
+        <div class="field">
+          <label for="actionDone">ACTION DONE</label>
+          <textarea id="actionDone" name="actionDone" placeholder="Actions you took..."></textarea>
+        </div>
 
-        <label>DOMAIN:</label>
-        <input type="text" id="domain" oninput="updatePreview()">
+        <div class="field">
+          <label for="nextAction">NEXT ACTION</label>
+          <textarea id="nextAction" name="nextAction"></textarea>
+        </div>
 
-        <label>CONCERN:</label>
-        <textarea id="concern" oninput="updatePreview()"></textarea>
+        <div class="two-inline" style="align-items:end;">
+          <div class="field" style="margin-bottom:0;">
+            <label for="osad">OSAD (Y/N)</label>
+            <select id="osad" name="osad" aria-label="OSAD">
+              <option value="">-- select --</option>
+              <option value="Y">Y</option>
+              <option value="N">N</option>
+            </select>
+          </div>
 
-        <label>ACTION DONE:</label>
-        <textarea id="actionDone" oninput="updatePreview()"></textarea>
-
-        <label>NEXT ACTION:</label>
-        <textarea id="nextAction" oninput="updatePreview()"></textarea>
-
-        <label>OSAD (Y/N):</label>
-        <select id="osadYN" onchange="toggleReason(); updatePreview()">
-            <option value="">-- Select --</option>
-            <option value="Y">Y</option>
-            <option value="N">N</option>
-        </select>
-
-        <div id="reasonWrapper" style="display:none;">
-            <label>Possible Reason:</label>
-            <select id="osadReasonDropdown" onchange="updatePreview()" style="display:none;">
-                <option value="">-- Select --</option>
+          <!-- Container for OSAD extra fields (stays in form flow, appears when needed) -->
+          <div id="osadExtrasFlow" style="display:flex;flex-direction:column;gap:6px;">
+            <div id="osadReasonWrapper" style="display:none;">
+              <label for="osadReason">REASON</label>
+              <select id="osadReason" name="osadReason">
+                <option value="">-- select reason --</option>
                 <option value="Site Launch">Site Launch</option>
                 <option value="Website Issue">Website Issue</option>
+                <option value="SSL">SSL</option>
                 <option value="SSL Issue">SSL Issue</option>
                 <option value="Other">Other</option>
-            </select>
+              </select>
+            </div>
 
-            <textarea id="osadReasonText" placeholder="Reason..." oninput="updatePreview()" style="display:none;"></textarea>
+            <div id="osadOtherWrapper" style="display:none;">
+              <label for="osadOther">REASON - OTHER (explain)</label>
+              <textarea id="osadOther" name="osadOther" placeholder="Explain other reason..."></textarea>
+            </div>
+          </div>
         </div>
-    </form>
 
-    <div id="output" style="display:none;"></div>
-
-    <div style="display:flex; gap:10px; margin-top:10px;">
-        <button id="copyBtn" style="display:none;" type="button" onclick="copyNotes()">Copy to Clipboard</button>
-        <button id="resetBtn" style="display:none; background:#dc3545;" type="button" onclick="resetForm()">Reset</button>
+        <div class="controls">
+          <button class="btn" id="copyBtn" type="button" title="Copy preview to clipboard">Copy Preview</button>
+          <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+          <div style="flex:1"></div>
+          <div class="small muted">Realtime preview updates as you type →</div>
+        </div>
+      </form>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <!-- RIGHT: Preview -->
+    <div class="card preview" aria-labelledby="previewTitle">
+      <div class="header" style="margin-bottom:6px;">
+        <h1 id="previewTitle" style="font-size:16px;margin:0">Realtime Preview</h1>
+      </div>
+
+      <div id="notePreview" class="note" aria-live="polite">
+        -- Your note will appear here as you type --
+      </div>
+
+      <div class="footer muted">Tip: Use "Copy Preview" to copy the generated note. Reset clears the form.</div>
+    </div>
+  </div>
+
+  <script>
+    // escape HTML for safe preview text
+    function esc(s){
+      return String(s || "").replace(/[&<>"']/g, function(m){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m];
+      });
+    }
+
+    // Elements
+    const form = document.getElementById('noteForm');
+    const fields = {
+      cid: document.getElementById('cid'),
+      cprod: document.getElementById('cprod'),
+      phone: document.getElementById('phone'),
+      name: document.getElementById('name'),
+      authenticated: document.getElementById('authenticated'),
+      domain: document.getElementById('domain'),
+      concern: document.getElementById('concern'),
+      actionDone: document.getElementById('actionDone'),
+      nextAction: document.getElementById('nextAction'),
+      osad: document.getElementById('osad'),
+      osadReasonWrapper: document.getElementById('osadReasonWrapper'),
+      osadReason: document.getElementById('osadReason'),
+      osadOtherWrapper: document.getElementById('osadOtherWrapper'),
+      osadOther: document.getElementById('osadOther'),
+      notePreview: document.getElementById('notePreview'),
+      copyBtn: document.getElementById('copyBtn'),
+      resetBtn: document.getElementById('resetBtn')
+    };
+
+    // Show/hide OSAD reason and other fields
+    function updateOsadVisibility(){
+      const v = fields.osad.value;
+      if(v === 'Y'){
+        fields.osadReasonWrapper.style.display = 'block';
+      } else {
+        fields.osadReasonWrapper.style.display = 'none';
+        fields.osadOtherWrapper.style.display = 'none';
+        fields.osadReason.value = '';
+        fields.osadOther.value = '';
+      }
+      updatePreview();
+    }
+
+    function updateOsadReason(){
+      if(fields.osadReason.value === 'Other'){
+        fields.osadOtherWrapper.style.display = 'block';
+      } else {
+        fields.osadOtherWrapper.style.display = 'none';
+        fields.osadOther.value = '';
+      }
+      updatePreview();
+    }
+
+    // Build preview text
+    function buildPreview(){
+      const v = {
+        cid: fields.cid.value.trim(),
+        cprod: fields.cprod.value.trim(),
+        phone: fields.phone.value.trim(),
+        name: fields.name.value.trim(),
+        authenticated: fields.authenticated.value.trim(),
+        domain: fields.domain.value.trim(),
+        concern: fields.concern.value.trim(),
+        actionDone: fields.actionDone.value.trim(),
+        nextAction: fields.nextAction.value.trim(),
+        osad: fields.osad.value.trim(),
+        osadReason: fields.osadReason ? fields.osadReason.value.trim() : '',
+        osadOther: fields.osadOther ? fields.osadOther.value.trim() : ''
+      };
+
+      // OSAD line formatting
+      let osadLine = 'OSAD: ';
+      if(v.osad === 'Y'){
+        osadLine += 'Y';
+        if(v.osadReason){
+          osadLine += ' (' + v.osadReason;
+          if(v.osadReason === 'Other' && v.osadOther){
+            osadLine += ' - ' + v.osadOther;
+          }
+          osadLine += ')';
+        }
+      } else if(v.osad === 'N'){
+        osadLine += 'N';
+      }
+
+      const lines = [
+        'CID: ' + esc(v.cid),
+        'CPROD: ' + esc(v.cprod),
+        'PHONE#: ' + esc(v.phone),
+        'NAME: ' + esc(v.name),
+        'AUTHENTICATED (Y/N): ' + esc(v.authenticated),
+        'DOMAIN: ' + esc(v.domain),
+        '',
+        'CONCERN:',
+        esc(v.concern || ''),
+        '',
+        'ACTION DONE:',
+        esc(v.actionDone || ''),
+        '',
+        'NEXT ACTION:',
+        esc(v.nextAction || ''),
+        '',
+        osadLine
+      ];
+
+      return lines.join('\n');
+    }
+
+    // Update preview element
+    function updatePreview(){
+      fields.notePreview.textContent = buildPreview();
+    }
+
+    // Attach listeners
+    [
+      fields.cid, fields.cprod, fields.phone, fields.name, fields.authenticated,
+      fields.domain, fields.concern, fields.actionDone, fields.nextAction
+    ].forEach(el => {
+      if(!el) return;
+      el.addEventListener('input', updatePreview);
+      el.addEventListener('change', updatePreview);
+    });
+
+    fields.osad.addEventListener('change', updateOsadVisibility);
+    if(fields.osadReason){
+      fields.osadReason.addEventListener('change', updateOsadReason);
+      fields.osadReason.addEventListener('input', updatePreview);
+    }
+    if(fields.osadOther){
+      fields.osadOther.addEventListener('input', updatePreview);
+    }
+
+    // Copy preview
+    fields.copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(buildPreview());
+        fields.copyBtn.textContent = 'Copied!';
+        setTimeout(()=> fields.copyBtn.textContent = 'Copy Preview', 1400);
+      } catch(e){
+        // fallback
+        const tmp = document.createElement('textarea');
+        tmp.value = buildPreview();
+        document.body.appendChild(tmp);
+        tmp.select();
+        try { document.execCommand('copy'); fields.copyBtn.textContent = 'Copied!'; } catch(e){}
+        tmp.remove();
+        setTimeout(()=> fields.copyBtn.textContent = 'Copy Preview', 1400);
+      }
+    });
+
+    // Reset
+    fields.resetBtn.addEventListener('click', ()=>{
+      form.reset();
+      updateOsadVisibility();
+      updateOsadReason();
+      updatePreview();
+    });
+
+    // initialize preview
+    updatePreview();
+  </script>
 </body>
 </html>
