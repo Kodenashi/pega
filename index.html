@@ -3,373 +3,291 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Compact Note Generator — Preview Hidden Until Input</title>
+  <title>Note Generator — Contained Preview</title>
   <style>
     :root{
-      --accent-a: #bff0ff;
-      --accent-b: #dfe9ff;
-      --muted: #54606f;
-      --card: rgba(255,255,255,0.94);
-      --radius: 8px;
-      --shadow: 0 8px 20px rgba(18,38,63,0.06);
-      --maxw: 980px;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --bg1:#4f46e5;
+      --bg2:#06b6d4;
+      --muted:#6b7280;
+      --radius:12px;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-
-    html,body{
-      height:100%;
-      margin:0;
-      background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px;
-      color:#071129;
-    }
-
-    .shell{
-      width:100%;
-      max-width:var(--maxw);
-      display:grid;
-      grid-template-columns: 1fr 380px;
-      gap:12px;
+    html,body{height:100%;margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#07203a}
+    .wrap{
+      max-width:1100px;margin:28px auto;padding:18px;
+      display:grid;grid-template-columns:1fr 1fr;gap:20px;
       align-items:start;
     }
-
     .card{
-      background: var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      border:1px solid rgba(12,20,30,0.06);
+      background:rgba(255,255,255,0.95);backdrop-filter:blur(6px);border-radius:var(--radius);padding:18px;
+      box-shadow:0 8px 24px rgba(2,6,23,0.12);
+      display:flex;flex-direction:column;
+      min-height:0; /* allow children to control height */
     }
-
-    .form-card{ padding:10px 12px; }
-
-    .preview-card{
-      padding:8px 10px;
-      display:flex;
-      flex-direction:column;
-      min-height:220px;
-      max-height:520px;
+    h1{margin:0 0 6px;font-size:18px;color:#07203a}
+    p.lead{margin:0 0 12px;color:var(--muted);font-size:13px}
+    form{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:10px 12px;
+      align-items:start;
     }
-
-    .title-row{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-    .logo{ width:36px; height:36px; border-radius:6px; background:linear-gradient(135deg,var(--accent-a),var(--accent-b)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700 }
-    h1{ font-size:16px; margin:0 }
-    .hint{ font-size:12px; color:var(--muted); margin-top:4px }
-
-    form{ display:flex; flex-direction:column; gap:8px }
-    .field{ display:flex; flex-direction:column; gap:4px }
-    label{ font-size:12px; color:var(--muted); margin:0 }
-    input[type="text"], input[type="tel"], select, textarea{
-      font-size:13px; padding:8px 9px; border-radius:7px; border:1px solid rgba(10,20,30,0.06); outline:none;
-      background:#fff; box-sizing:border-box;
+    .full{grid-column:1 / -1}
+    label{font-size:12px;color:#0f172a;margin-bottom:6px;display:block}
+    input[type="text"], input[type="tel"], select, textarea {
+      width:100%;padding:9px 10px;border-radius:10px;border:1px solid #e6edf3;background:#fff;font-size:13px;
+      box-sizing:border-box;
     }
-    input:focus,textarea:focus,select:focus{ box-shadow:0 10px 30px rgba(102,166,255,0.08); border-color:rgba(102,166,255,0.4) }
-    textarea{ min-height:64px; resize:vertical; font-size:13px; padding-top:9px }
-
-    .row2{ display:flex; gap:8px }
-    .row2 .field{ flex:1 }
-
-    .preview-header{ display:flex; align-items:center; gap:8px; justify-content:space-between; margin-bottom:8px }
-    .preview-controls{ display:flex; gap:6px; align-items:center }
-    .btn{ padding:7px 10px; border-radius:7px; border:0; font-weight:700; color:white; background:linear-gradient(90deg,var(--accent-a),var(--accent-b)); cursor:pointer; font-size:13px }
-    .btn.ghost{ background:transparent; color:var(--muted); border:1px solid rgba(10,20,30,0.06) }
-    .btn.small{ padding:6px 8px; font-size:12px }
-    .btn:disabled{ opacity:0.5; cursor:not-allowed; }
-
-    /* NOTE: sizes to content up to max-height — reduces empty space below last line */
-    .note{
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,255,0.98));
-      border-radius:7px; padding:10px; font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-      font-size:13px; color:#071129; white-space:pre-wrap; overflow:auto;
-      flex: 0 1 auto;
-      max-height: 260px;
+    textarea{min-height:72px;resize:vertical}
+    .preview-area{display:flex;flex-direction:column;align-items:stretch}
+    .preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .note-structure{font-weight:700;color:#cfe8ff;font-size:12px}
+    .preview-box{
+      background:#0f172a;color:#e6f0f6;padding:12px;border-radius:10px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;font-size:13px;
+      white-space:pre-wrap;line-height:1.5;box-sizing:border-box;width:100%;
+      /* keep the box contained: allow it to grow to content but limit to viewport and scroll if needed */
+      max-height: calc(60vh); /* adjust if you'd prefer a different limit */
+      overflow:auto;
+      word-break:break-word;
     }
-
-    .preview-footer{
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-      margin-top:8px;
-      align-items:center;
+    .controls{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+    button.btn{
+      padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;color:#07203a;
+      background:linear-gradient(90deg,rgba(255,255,255,0.92),rgba(255,255,255,0.8));
+      box-shadow:0 3px 8px rgba(2,6,23,0.08);
     }
-
-    .muted{ color:var(--muted); font-size:12px }
-
-    @media (max-width:900px){
-      .shell{ grid-template-columns: 1fr; }
-      .preview-card{ order:2 }
+    button.primary{
+      background:linear-gradient(90deg,#06b6d4,#4f46e5);
+      color:#fff;
+    }
+    .small{font-size:12px;padding:6px 8px}
+    .muted{color:var(--muted);font-size:12px}
+    .hidden{display:none}
+    @media (max-width:980px){
+      .wrap{grid-template-columns:1fr; padding:12px}
+      form{grid-template-columns:1fr}
+      .preview-box{max-height:40vh}
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <!-- FORM -->
-    <div class="card form-card" aria-labelledby="formTitle">
-      <div class="title-row">
-        <div class="logo">
-          <img src="https://kodenashi.github.io/pega/assets/pegalogo.png" alt="Pega" style="max-width:60px;">
-        </div>
-        <div>
-          <h1 id="formTitle">Note Generator</h1>
-          <div class="hint">Pega Notes - Efficiency at its finest</div>
-        </div>
-      </div>
+  <div class="wrap">
+    <!-- Form Card -->
+    <div class="card">
+      <h1>Note Generator</h1>
+      <p class="lead">Fill fields — preview updates live. Preview contained inside its card.</p>
 
       <form id="noteForm" autocomplete="off" onsubmit="return false;">
-        <div class="row2">
-          <div class="field">
-            <label for="cid">CID</label>
-            <input id="cid" name="cid" type="text">
-          </div>
-          <div class="field">
-            <label for="cprod">CPROD</label>
-            <input id="cprod" name="cprod" type="text">
-          </div>
+        <div>
+          <label for="cid">CID:</label>
+          <input id="cid" name="cid" type="text" placeholder="e.g., 123456" />
         </div>
 
-        <div class="row2">
-          <div class="field">
-            <label for="phone">PHONE#</label>
-            <input id="phone" name="phone" type="tel">
-          </div>
-          <div class="field">
-            <label for="name">NAME</label>
-            <input id="name" name="name" type="text">
-          </div>
+        <div>
+          <label for="cprod">CPROD:</label>
+          <input id="cprod" name="cprod" type="text" placeholder="Product code or name" />
         </div>
 
-        <div class="row2">
-          <div class="field">
-            <label for="authenticated">AUTHENTICATED (Y/N)</label>
-            <select id="authenticated" name="authenticated" aria-label="Authenticated">
-              <option value="">--Select--</option>
-              <option value="Y">Y</option>
-              <option value="N">N</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="domain">DOMAIN</label>
-            <input id="domain" name="domain" type="text">
-          </div>
+        <div>
+          <label for="phone">PHONE#:</label>
+          <input id="phone" name="phone" type="tel" placeholder="+1-555-555-5555" />
         </div>
 
-        <div class="field">
-          <label for="concern">CONCERN</label>
-          <textarea id="concern" name="concern" placeholder="Describe the concern..."></textarea>
+        <div>
+          <label for="name">NAME:</label>
+          <input id="name" name="name" type="text" placeholder="Customer name" />
         </div>
 
-        <div class="field">
-          <label for="actionDone">ACTION DONE</label>
-          <textarea id="actionDone" name="actionDone" placeholder="Actions you took..."></textarea>
+        <div>
+          <label for="auth">AUTHENTICATED (Y/N):</label>
+          <select id="auth" name="auth" >
+            <option value=""></option>
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+          </select>
         </div>
 
-        <div class="field">
-          <label for="nextAction">NEXT ACTION</label>
-          <textarea id="nextAction" name="nextAction"></textarea>
+        <div>
+          <label for="domain">DOMAIN:</label>
+          <input id="domain" name="domain" type="text" placeholder="example.com" />
         </div>
 
-        <div class="row2" style="align-items:flex-end">
-          <div class="field" style="margin-bottom:0">
-            <label for="osad">OSAD (Y/N)</label>
-            <select id="osad" name="osad" aria-label="OSAD">
-              <option value="">--Select--</option>
-              <option value="Y">Y</option>
-              <option value="N">N</option>
-            </select>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <div id="osadReasonWrap" style="display:none">
-              <label for="osadReason">REASON</label>
-              <select id="osadReason" name="osadReason">
-                <option value="">—</option>
-                <option value="Site Launch">Site Launch</option>
-                <option value="Website Issue">Website Issue</option>
-                <option value="SSL">SSL</option>
-                <option value="SSL Issue">SSL Issue</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div id="osadOtherWrap" style="display:none">
-              <label for="osadOther">OTHER (explain)</label>
-              <textarea id="osadOther" name="osadOther" placeholder="Explain other reason..." style="min-height:58px"></textarea>
-            </div>
-          </div>
+        <div class="full">
+          <label for="concern">CONCERN:</label>
+          <textarea id="concern" name="concern" placeholder="Describe the concern"></textarea>
         </div>
 
+        <div>
+          <label for="action">ACTION DONE:</label>
+          <textarea id="action" name="action" placeholder="What was done"></textarea>
+        </div>
+
+        <div>
+          <label for="next">NEXT ACTION:</label>
+          <textarea id="next" name="next" placeholder="Planned next steps"></textarea>
+        </div>
+
+        <div>
+          <label for="osad">OSAD (Y/N):</label>
+          <select id="osad" name="osad">
+            <option value=""></option>
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+          </select>
+        </div>
+
+        <div id="reasonWrap" class="hidden">
+          <label for="reason">REASON:</label>
+          <select id="reason" name="reason">
+            <option value=""></option>
+            <option value="Site Launch">Site Launch</option>
+            <option value="SSL Issue">SSL Issue</option>
+            <option value="Website Issue">Website Issue</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div id="otherWrap" class="full hidden">
+          <label for="otherReason">If Other, specify:</label>
+          <input id="otherReason" name="otherReason" type="text" placeholder="Custom reason" />
+        </div>
       </form>
     </div>
 
-    <!-- PREVIEW -->
-    <div class="card preview-card" aria-labelledby="previewTitle">
+    <!-- Preview Card -->
+    <div class="card preview-area">
       <div class="preview-header">
         <div>
-          <h1 id="previewTitle" style="font-size:15px;margin:0">Realtime Preview</h1>
-          <div class="muted" style="margin-top:4px;font-size:12px">Realtime notes you can directly copy</div>
+          <div class="muted">Live Preview</div>
         </div>
-        <div style="width:1px"></div>
       </div>
 
-      <div id="notePreview" class="note" aria-live="polite"></div>
+      <div id="preview" class="preview-box" aria-live="polite">
+CID:  
+CPROD: 
+PHONE#:  
+NAME:  
+AUTHENTICATED (Y/N):  
+DOMAIN:  
+CONCERN:  
+ACTION DONE:  
+NEXT ACTION:  
+OSAD (Y/N) REASON: 
+      </div>
 
-      <div class="preview-footer" role="region" aria-label="Preview actions">
-        <button id="copyBtn" class="btn small" title="Copy preview" disabled>Copy</button>
-        <button id="resetBtn" class="btn ghost small" title="Reset form">Reset</button>
+      <div class="controls" style="margin-top:10px">
+        <button class="btn primary" id="copyBtn" title="Copy note to clipboard">Copy</button>
+        <button class="btn" id="resetBtn" title="Reset form">Reset</button>
       </div>
     </div>
   </div>
 
   <script>
-    function esc(s){ return String(s || '').replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
-
-    const els = {
-      form: document.getElementById('noteForm'),
-      cid: document.getElementById('cid'),
-      cprod: document.getElementById('cprod'),
-      phone: document.getElementById('phone'),
-      name: document.getElementById('name'),
-      authenticated: document.getElementById('authenticated'),
-      domain: document.getElementById('domain'),
-      concern: document.getElementById('concern'),
-      actionDone: document.getElementById('actionDone'),
-      nextAction: document.getElementById('nextAction'),
-      osad: document.getElementById('osad'),
-      osadReasonWrap: document.getElementById('osadReasonWrap'),
-      osadReason: document.getElementById('osadReason'),
-      osadOtherWrap: document.getElementById('osadOtherWrap'),
-      osadOther: document.getElementById('osadOther'),
-      notePreview: document.getElementById('notePreview'),
-      copyBtn: document.getElementById('copyBtn'),
-      resetBtn: document.getElementById('resetBtn')
-    };
-
-    function handleOsadChange(){
-      if(els.osad.value === 'Y'){ els.osadReasonWrap.style.display = 'block'; }
-      else { els.osadReasonWrap.style.display = 'none'; els.osadOtherWrap.style.display='none'; if(els.osadReason) els.osadReason.value=''; if(els.osadOther) els.osadOther.value=''; }
-      render();
-    }
-
-    function handleReasonChange(){
-      if(els.osadReason && els.osadReason.value === 'Other'){ els.osadOtherWrap.style.display = 'block'; }
-      else { els.osadOtherWrap.style.display = 'none'; if(els.osadOther) els.osadOther.value=''; }
-      render();
-    }
-
-    function buildPreviewText(){
-      const v = {
-        cid: els.cid.value.trim(),
-        cprod: els.cprod.value.trim(),
-        phone: els.phone.value.trim(),
-        name: els.name.value.trim(),
-        auth: els.authenticated.value.trim(),
-        domain: els.domain.value.trim(),
-        concern: els.concern.value.trim(),
-        action: els.actionDone.value.trim(),
-        next: els.nextAction.value.trim(),
-        osad: els.osad.value.trim(),
-        reason: els.osadReason ? els.osadReason.value.trim() : '',
-        other: els.osadOther ? els.osadOther.value.trim() : ''
+    (function(){
+      const fields = {
+        cid: document.getElementById('cid'),
+        cprod: document.getElementById('cprod'),
+        phone: document.getElementById('phone'),
+        name: document.getElementById('name'),
+        auth: document.getElementById('auth'),
+        domain: document.getElementById('domain'),
+        concern: document.getElementById('concern'),
+        action: document.getElementById('action'),
+        next: document.getElementById('next'),
+        osad: document.getElementById('osad'),
+        reason: document.getElementById('reason'),
+        otherReason: document.getElementById('otherReason'),
       };
 
-      // If every value is empty, return empty string so preview stays hidden
-      const hasAny = Object.values(v).some(val => val !== '');
-      if(!hasAny) return '';
+      const previewEl = document.getElementById('preview');
+      const reasonWrap = document.getElementById('reasonWrap');
+      const otherWrap = document.getElementById('otherWrap');
+      const copyBtn = document.getElementById('copyBtn');
+      const resetBtn = document.getElementById('resetBtn');
 
-      // Stacked identifiers (each on its own line)
-      const idLines = [];
-      if(v.cid) idLines.push('CID: ' + esc(v.cid));
-      if(v.cprod) idLines.push('CPROD: ' + esc(v.cprod));
-      if(v.phone) idLines.push('PHONE#: ' + esc(v.phone));
-      if(v.name) idLines.push('NAME: ' + esc(v.name));
-
-      // AUTHENTICATED on its own line; DOMAIN below it (if provided)
-      const authLine = 'AUTHENTICATED (Y/N): ' + esc(v.auth || '');
-      const domainLine = v.domain ? ('DOMAIN: ' + esc(v.domain)) : '';
-
-      const concernLine = 'CONCERN: ' + esc(v.concern || '');
-      const actionLine  = 'ACTION DONE: ' + esc(v.action || '');
-      const nextLine    = 'NEXT ACTION: ' + esc(v.next || '');
-
-      let osadLine = 'OSAD: ';
-      if(v.osad === 'Y'){
-        osadLine += 'Y';
-        if(v.reason){
-          osadLine += ' (' + esc(v.reason);
-          if(v.reason === 'Other' && v.other) osadLine += ' - ' + esc(v.other);
-          osadLine += ')';
+      function buildPreview(){
+        const authVal = (fields.auth.value || '').trim();
+        const osadVal = (fields.osad.value || '').trim();
+        let reasonVal = '';
+        if(osadVal === 'Y'){
+          const r = (fields.reason.value || '').trim();
+          if(r === 'Other'){
+            reasonVal = fields.otherReason.value.trim() || '';
+          } else {
+            reasonVal = r;
+          }
         }
-      } else if(v.osad === 'N'){
-        osadLine += 'N';
-      } else {
-        osadLine += '';
+
+        const lines = [
+          `CID: ${fields.cid.value.trim()}`,
+          `CPROD: ${fields.cprod.value.trim()}`,
+          `PHONE#: ${fields.phone.value.trim()}`,
+          `NAME: ${fields.name.value.trim()}`,
+          `AUTHENTICATED (Y/N): ${authVal}`,
+          `DOMAIN: ${fields.domain.value.trim()}`,
+          `CONCERN: ${fields.concern.value.trim()}`,
+          `ACTION DONE: ${fields.action.value.trim()}`,
+          `NEXT ACTION: ${fields.next.value.trim()}`,
+          `OSAD (Y/N) REASON: ${osadVal}` + (reasonVal ? ` ${reasonVal}` : '')
+        ];
+
+        // exact formatting, no trailing blank line
+        previewEl.textContent = lines.join('\n');
       }
 
-      // Compose final pieces (only include non-empty lines)
-      const pieces = [];
-      pieces.push(...idLines);
-      pieces.push(authLine);
-      if(domainLine) pieces.push(domainLine);
-      if(v.concern) pieces.push(concernLine);
-      if(v.action) pieces.push(actionLine);
-      if(v.next) pieces.push(nextLine);
-      pieces.push(osadLine);
+      function handleConditional(){
+        const osadVal = fields.osad.value;
+        if(osadVal === 'Y'){
+          reasonWrap.classList.remove('hidden');
+        } else {
+          reasonWrap.classList.add('hidden');
+          if(fields.reason) fields.reason.value = '';
+          otherWrap.classList.add('hidden');
+          if(fields.otherReason) fields.otherReason.value = '';
+        }
 
-      return pieces.join('\n');
-    }
-
-    function render(){
-      const text = buildPreviewText();
-      els.notePreview.textContent = text; // empty string if nothing entered
-      // disable Copy when there's nothing to copy
-      if(!text){
-        els.copyBtn.disabled = true;
-      } else {
-        els.copyBtn.disabled = false;
+        if(fields.reason && fields.reason.value === 'Other'){
+          otherWrap.classList.remove('hidden');
+        } else {
+          otherWrap.classList.add('hidden');
+          if(fields.otherReason) fields.otherReason.value = '';
+        }
       }
-    }
 
-    // attach listeners
-    ['input','change'].forEach(ev => {
-      [els.cid, els.cprod, els.phone, els.name, els.authenticated, els.domain, els.concern, els.actionDone, els.nextAction].forEach(el=>{
-        if(el) el.addEventListener(ev, render);
+      // attach listeners
+      Object.values(fields).forEach(el => {
+        if(!el) return;
+        el.addEventListener('input', () => { buildPreview(); handleConditional(); });
+        el.addEventListener('change', () => { buildPreview(); handleConditional(); });
       });
-    });
 
-    if(els.osad) els.osad.addEventListener('change', handleOsadChange);
-    if(els.osadReason) els.osadReason.addEventListener('change', handleReasonChange);
-    if(els.osadOther) els.osadOther.addEventListener('input', render);
+      copyBtn.addEventListener('click', async () => {
+        const text = previewEl.textContent;
+        try {
+          await navigator.clipboard.writeText(text);
+          copyBtn.textContent = 'Copied ✓';
+          setTimeout(()=>copyBtn.textContent = 'Copy', 1800);
+        } catch (e) {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); copyBtn.textContent = 'Copied ✓'; setTimeout(()=>copyBtn.textContent = 'Copy', 1800); }
+          catch(err){ alert('Copy failed — select and copy manually'); }
+          document.body.removeChild(ta);
+        }
+      });
 
-    els.copyBtn.addEventListener('click', async ()=>{
-      const text = buildPreviewText();
-      if(!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-        const orig = els.copyBtn.textContent;
-        els.copyBtn.textContent = 'Copied';
-        setTimeout(()=> els.copyBtn.textContent = orig, 1200);
-      } catch(e){
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); } catch(e){}
-        ta.remove();
-      }
-    });
+      resetBtn.addEventListener('click', () => {
+        document.getElementById('noteForm').reset();
+        reasonWrap.classList.add('hidden');
+        otherWrap.classList.add('hidden');
+        buildPreview();
+      });
 
-    els.resetBtn.addEventListener('click', ()=>{
-      els.form.reset();
-      handleOsadChange();
-      handleReasonChange();
-      render();
-    });
-
-    // initialize render (keeps preview empty until user types)
-    render();
+      // init
+      buildPreview();
+    })();
   </script>
 </body>
 </html>
