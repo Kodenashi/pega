@@ -9,89 +9,88 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
-            font-size: .9rem;
-        }
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f8fafc;
+        color: #1e293b;
+        font-size: .85rem;
+    }
 
-        .form-label {
-            font-weight: 600;
-            color: #475569;
-            font-size: .8rem;
-            margin-bottom: .25rem;
-            display: block;
-        }
+    .form-label {
+        font-weight: 600;
+        color: #475569;
+        font-size: .75rem;
+        margin-bottom: .15rem;
+        display: block;
+    }
 
-        .form-input,
-        .form-textarea,
-        .form-select {
-            background: #f9fafb;
-            border: 1px solid #cbd5e1;
-            color: #0f172a;
-            border-radius: .5rem;
-            padding: .55rem .7rem;
-            width: 100%;
-            outline: none;
-            font-size: .85rem;
-            transition: border 0.2s, box-shadow 0.2s;
-        }
+    .form-input,
+    .form-textarea,
+    .form-select {
+        background: #f9fafb;
+        border: 1px solid #cbd5e1;
+        color: #0f172a;
+        border-radius: .4rem;
+        padding: .3rem .5rem;
+        width: 100%;
+        outline: none;
+        font-size: .8rem;
+        transition: border 0.2s, box-shadow 0.2s;
+    }
 
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            border-color: #f97316;
-            box-shadow: 0 0 0 3px #f9731644;
-            background: #fff;
-        }
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+        border-color: #f97316;
+        box-shadow: 0 0 0 2px #f9731633;
+        background: #fff;
+    }
 
-        .section-title {
-            color: #f97316;
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-align: center;
-        }
+    .section-title {
+        color: #f97316;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-align: center;
+    }
 
-        button {
-            font-size: .9rem;
-            padding: .6rem .75rem;
-            border-radius: .7rem;
-            font-weight: 600;
-            transition: background 0.2s, transform 0.1s;
-        }
+    button {
+        font-size: .8rem;
+        padding: .45rem .65rem;
+        border-radius: .6rem;
+        font-weight: 600;
+        transition: background 0.2s, transform 0.1s;
+    }
 
-        button:active {
-            transform: scale(0.97);
-        }
-    </style>
-</head>
+    button:active {
+        transform: scale(0.97);
+    }
+</style>
 
-<body class="p-6">
-    <div class="max-w-2xl mx-auto space-y-6">
+<body class="p-3">
+    <div class="max-w-2xl mx-auto space-y-3">
         <!-- Form -->
-        <div class="card p-6">
-            <form id="notesForm" class="grid grid-cols-2 gap-3">
+        <div class="card p-3">
+            <form id="notesForm" class="grid grid-cols-2 gap-2">
                 <div>
                     <label class="form-label">CID</label>
-                    <input id="cid" class="form-input text-sm py-2">
+                    <input id="cid" class="form-input text-sm py-1.5">
                 </div>
                 <div>
                     <label class="form-label">CPROD</label>
-                    <input id="cprod" class="form-input text-sm py-2">
+                    <input id="cprod" class="form-input text-sm py-1.5">
                 </div>
                 <div>
                     <label class="form-label">Phone #</label>
-                    <input id="phone" class="form-input text-sm py-2">
+                    <input id="phone" class="form-input text-sm py-1.5">
                 </div>
                 <div>
                     <label class="form-label">Name</label>
-                    <input id="name" class="form-input text-sm py-2">
+                    <input id="name" class="form-input text-sm py-1.5">
                 </div>
                 <div>
                     <label class="form-label">Authenticated</label>
-                    <select id="authenticated" class="form-select text-sm py-2">
+                    <select id="authenticated" class="form-select text-sm py-1.5">
                         <option disabled selected>Select</option>
                         <option>Y</option>
                         <option>N</option>
@@ -99,37 +98,36 @@
                 </div>
                 <div>
                     <label class="form-label">Domain</label>
-                    <input id="domain" class="form-input text-sm py-2">
+                    <input id="domain" class="form-input text-sm py-1.5">
                 </div>
 
-                <!-- Bigger fields span across both columns -->
+                <!-- Bigger fields -->
                 <div class="col-span-2">
                     <label class="form-label">Concern</label>
-                    <textarea id="concern" class="form-textarea h-14 text-sm"></textarea>
+                    <textarea id="concern" class="form-textarea h-12 text-sm"></textarea>
                 </div>
                 <div class="col-span-2">
                     <label class="form-label">Action Done</label>
-                    <textarea id="actionDone" class="form-textarea h-14 text-sm"></textarea>
+                    <textarea id="actionDone" class="form-textarea h-12 text-sm"></textarea>
                 </div>
                 <div class="col-span-2">
                     <label class="form-label">Next Action</label>
-                    <textarea id="nextAction" class="form-textarea h-14 text-sm"></textarea>
+                    <textarea id="nextAction" class="form-textarea h-12 text-sm"></textarea>
                 </div>
 
                 <div class="col-span-2">
                     <label class="form-label">OSAD</label>
-                    <select id="osad" class="form-select text-sm py-2">
+                    <select id="osad" class="form-select text-sm py-1.5">
                         <option disabled selected>Select</option>
                         <option>Y</option>
                         <option>N</option>
                     </select>
                 </div>
 
-
-                <div id="osadReasonContainer" class="hidden col-span-2 space-y-2">
+                <div id="osadReasonContainer" class="hidden col-span-2 space-y-1">
                     <div>
                         <label class="form-label">Reason</label>
-                        <select id="osadReason" class="form-select text-sm py-2">
+                        <select id="osadReason" class="form-select text-sm py-1.5">
                             <option disabled selected>Select</option>
                             <option>Site Launch</option>
                             <option>SSL Issue</option>
@@ -139,19 +137,17 @@
                     </div>
                     <div id="osadReasonOtherContainer" class="hidden">
                         <label class="form-label">Explain</label>
-                        <textarea id="osadReasonOther" class="form-textarea h-12 text-sm"></textarea>
+                        <textarea id="osadReasonOther" class="form-textarea h-10 text-sm"></textarea>
                     </div>
                 </div>
             </form>
-
-
         </div>
 
         <!-- Preview -->
-        <div class="card p-6 flex flex-col">
-            <h2 class="section-title mb-4">Live Preview</h2>
-            <pre id="livePreview" class="bg-gray-50 border border-gray-200 p-4 rounded-lg text-sm leading-relaxed overflow-auto whitespace-pre-wrap max-h-64"></pre>
-            <div class="flex space-x-4 mt-4">
+        <div class="card p-3 flex flex-col">
+            <h2 class="section-title mb-2">Live Preview</h2>
+            <pre id="livePreview" class="bg-gray-50 border border-gray-200 p-3 rounded-lg text-sm leading-snug overflow-auto whitespace-pre-wrap max-h-48"></pre>
+            <div class="flex space-x-3 mt-3">
                 <button id="copyButton" class="w-1/2 bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center space-x-2">
                     <span>📋</span><span>Copy</span>
                 </button>
