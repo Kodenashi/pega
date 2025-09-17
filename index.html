@@ -2,183 +2,249 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Support Notes Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0d1117;
-            color: #e2e8f0;
-            font-size: .8rem
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Support Notes Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: .9rem;
+    }
 
-        .form-label {
-            font-weight: 500;
-            color: #94a3b8;
-            font-size: .7rem;
-            margin-bottom: .15rem
-        }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
 
-        .form-input,
-        .form-textarea,
-        .form-select {
-            background: #1f2937;
-            border: 1px solid #374151;
-            color: #f3f4f6;
-            border-radius: .25rem;
-            padding: .25rem .5rem;
-            width: 100%;
-            outline: none;
-            font-size: .8rem
-        }
+    .form-label {
+      font-weight: 600;
+      color: #475569;
+      font-size: .8rem;
+      margin-bottom: .25rem;
+      display: block;
+    }
 
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 1px #2563eb
-        }
+    .form-input,
+    .form-textarea,
+    .form-select {
+      background: #f9fafb;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      border-radius: .5rem;
+      padding: .55rem .7rem;
+      width: 100%;
+      outline: none;
+      font-size: .85rem;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
 
-        button {
-            font-size: .8rem;
-            padding: .4rem .6rem;
-            border-radius: .5rem
-        }
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px #f9731644;
+      background: #fff;
+    }
 
-        h1,
-        h2 {
-            font-size: 1.2rem
-        }
-    </style>
+    .section-title {
+      color: #f97316;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    button {
+      font-size: .9rem;
+      padding: .6rem .75rem;
+      border-radius: .7rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+  </style>
 </head>
 
-<body class="p-2">
-    <div class="max-w-lg mx-auto space-y-2">
-        <div class="bg-gray-800 p-3 rounded-xl shadow">
-            <h1 class="font-bold mb-2 text-white text-center">Support Notes</h1>
-            <form id="notesForm" class="space-y-1">
-                <label class="form-label">CID:<input id="cid" class="form-input"></label>
-                <label class="form-label">CPROD:<input id="cprod" class="form-input"></label>
-                <label class="form-label">PHONE#:<input id="phone" class="form-input"></label>
-                <label class="form-label">NAME:<input id="name" class="form-input"></label>
-                <label class="form-label">AUTHENTICATED:<select id="authenticated" class="form-select">
-                        <option disabled selected>Select</option>
-                        <option>Y</option>
-                        <option>N</option>
-                    </select></label>
-                <label class="form-label">DOMAIN:<input id="domain" class="form-input"></label>
-                <label class="form-label">CONCERN:<textarea id="concern" class="form-textarea h-12"></textarea></label>
-                <label class="form-label">ACTION DONE:<textarea id="actionDone" class="form-textarea h-12"></textarea></label>
-                <label class="form-label">NEXT ACTION:<textarea id="nextAction" class="form-textarea h-12"></textarea></label>
-                <label class="form-label">OSAD:<select id="osad" class="form-select">
-                        <option disabled selected>Select</option>
-                        <option>Y</option>
-                        <option>N</option>
-                    </select></label>
-                <div id="osadReasonContainer" class="hidden space-y-1">
-                    <label class="form-label">REASON:<select id="osadReason" class="form-select">
-                            <option disabled selected>Select</option>
-                            <option>Site Launch</option>
-                            <option>SSL Issue</option>
-                            <option>Website Issue</option>
-                            <option value="other">Other</option>
-                        </select></label>
-                    <div id="osadReasonOtherContainer" class="hidden"><label class="form-label">EXPLAIN:<textarea id="osadReasonOther" class="form-textarea h-10"></textarea></label></div>
-                </div>
-            </form>
+<body class="p-6">
+  <div class="max-w-2xl mx-auto space-y-6">
+    <!-- Form -->
+    <div class="card p-6">
+      <h1 class="section-title mb-5">Support Notes</h1>
+      <form id="notesForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="form-label">CID</label>
+          <input id="cid" class="form-input">
         </div>
-        <div class="bg-gray-800 p-3 rounded-xl shadow flex flex-col">
-            <h2 class="font-bold mb-2 text-white text-center">Live Preview</h2>
-            <pre id="livePreview" class="bg-gray-900 p-2 rounded text-xs leading-relaxed overflow-auto whitespace-pre-wrap max-h-48"></pre>
-            <div class="flex space-x-2 mt-2">
-                <button id="copyButton" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white">Copy</button>
-                <button id="resetButton" class="w-1/2 bg-red-600 hover:bg-red-700 text-white">Reset</button>
-            </div>
+        <div>
+          <label class="form-label">CPROD</label>
+          <input id="cprod" class="form-input">
         </div>
+        <div>
+          <label class="form-label">Phone #</label>
+          <input id="phone" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Name</label>
+          <input id="name" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Authenticated</label>
+          <select id="authenticated" class="form-select">
+            <option disabled selected>Select</option>
+            <option>Y</option>
+            <option>N</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Domain</label>
+          <input id="domain" class="form-input">
+        </div>
+        <div class="md:col-span-2">
+          <label class="form-label">Concern</label>
+          <textarea id="concern" class="form-textarea h-16"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="form-label">Action Done</label>
+          <textarea id="actionDone" class="form-textarea h-16"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="form-label">Next Action</label>
+          <textarea id="nextAction" class="form-textarea h-16"></textarea>
+        </div>
+        <div>
+          <label class="form-label">OSAD</label>
+          <select id="osad" class="form-select">
+            <option disabled selected>Select</option>
+            <option>Y</option>
+            <option>N</option>
+          </select>
+        </div>
+
+        <div id="osadReasonContainer" class="hidden md:col-span-2 space-y-3">
+          <div>
+            <label class="form-label">Reason</label>
+            <select id="osadReason" class="form-select">
+              <option disabled selected>Select</option>
+              <option>Site Launch</option>
+              <option>SSL Issue</option>
+              <option>Website Issue</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div id="osadReasonOtherContainer" class="hidden">
+            <label class="form-label">Explain</label>
+            <textarea id="osadReasonOther" class="form-textarea h-14"></textarea>
+          </div>
+        </div>
+      </form>
     </div>
-    <script>
-        const f = document.getElementById('notesForm'),
-            p = document.getElementById('livePreview'),
-            o = document.getElementById('osad'),
-            rc = document.getElementById('osadReasonContainer'),
-            rs = document.getElementById('osadReason'),
-            roc = document.getElementById('osadReasonOtherContainer'),
-            roi = document.getElementById('osadReasonOther'),
-            c = document.getElementById('copyButton'),
-            r = document.getElementById('resetButton');
-        const l = {
-            cid: 'CID:',
-            cprod: 'CPROD:',
-            phone: 'PHONE#:',
-            name: 'NAME:',
-            authenticated: 'AUTH:',
-            domain: 'DOMAIN:',
-            concern: 'CONCERN:',
-            actionDone: 'ACTION:',
-            nextAction: 'NEXT:',
-            osad: 'OSAD:'
-        };
 
-        function u() {
-            let t = '',
-                e = f.elements;
-            for (let i = 0; i < e.length; i++) {
-                let x = e[i];
-                if (x.id in l) {
-                    let v = x.value.trim();
-                    if (v && v !== 'Select') t += `${l[x.id]} ${v}\n`
-                }
-            }
-            if (o.value === 'Y') {
-                let v = rs.value.trim();
-                if (v && v !== 'Select') t += `REASON: ${v}\n`;
-                if (v === 'other' && roi.value.trim()) t += `EXPLAIN: ${roi.value.trim()}\n`
-            }
-            p.textContent = t
-        }
-        f.addEventListener('input', u);
-        o.addEventListener('change', () => {
-            o.value === 'Y' ? rc.classList.remove('hidden') : (rc.classList.add('hidden'), roc.classList.add('hidden'), rs.value = '', roi.value = '');
-            u()
-        });
-        rs.addEventListener('change', () => {
-            rs.value === 'other' ? roc.classList.remove('hidden') : (roc.classList.add('hidden'), roi.value = '');
-            u()
-        });
-        c.addEventListener('click', () => {
-            if (p.textContent.trim()) {
-                let t = document.createElement('textarea');
-                t.value = p.textContent;
-                document.body.appendChild(t);
-                t.select();
-                document.execCommand('copy');
-                document.body.removeChild(t);
-                a('Notes copied!')
-            } else a('No notes to copy')
-        });
+    <!-- Preview -->
+    <div class="card p-6 flex flex-col">
+      <h2 class="section-title mb-4">Live Preview</h2>
+      <pre id="livePreview"
+        class="bg-gray-50 border border-gray-200 p-4 rounded-lg text-sm leading-relaxed overflow-auto whitespace-pre-wrap max-h-64"></pre>
+      <div class="flex space-x-4 mt-4">
+        <button id="copyButton"
+          class="w-1/2 bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center space-x-2">
+          <span>📋</span><span>Copy</span>
+        </button>
+        <button id="resetButton"
+          class="w-1/2 bg-gray-500 hover:bg-gray-600 text-white flex items-center justify-center space-x-2">
+          <span>♻️</span><span>Reset</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function a(m) {
-            const e = document.getElementById('custom-alert');
-            if (e) e.remove();
-            const b = document.createElement('div');
-            b.id = 'custom-alert';
-            b.className = 'fixed top-2 right-2 bg-gray-900 text-white px-3 py-2 rounded text-xs';
-            b.textContent = m;
-            document.body.appendChild(b);
-            setTimeout(() => b.remove(), 2000)
+  <script>
+    const f = document.getElementById('notesForm'),
+      p = document.getElementById('livePreview'),
+      o = document.getElementById('osad'),
+      rc = document.getElementById('osadReasonContainer'),
+      rs = document.getElementById('osadReason'),
+      roc = document.getElementById('osadReasonOtherContainer'),
+      roi = document.getElementById('osadReasonOther'),
+      c = document.getElementById('copyButton'),
+      r = document.getElementById('resetButton');
+    const l = {
+      cid: 'CID:',
+      cprod: 'CPROD:',
+      phone: 'PHONE#:',
+      name: 'NAME:',
+      authenticated: 'AUTH:',
+      domain: 'DOMAIN:',
+      concern: 'CONCERN:',
+      actionDone: 'ACTION:',
+      nextAction: 'NEXT:',
+      osad: 'OSAD:'
+    };
+
+    function u() {
+      let t = '',
+        e = f.elements;
+      for (let i = 0; i < e.length; i++) {
+        let x = e[i];
+        if (x.id in l) {
+          let v = x.value.trim();
+          if (v && v !== 'Select') t += `${l[x.id]} ${v}\n`
         }
-        r.addEventListener('click', () => {
-            f.reset();
-            rc.classList.add('hidden');
-            roc.classList.add('hidden');
-            u()
-        });
-    </script>
+      }
+      if (o.value === 'Y') {
+        let v = rs.value.trim();
+        if (v && v !== 'Select') t += `REASON: ${v}\n`;
+        if (v === 'other' && roi.value.trim()) t += `EXPLAIN: ${roi.value.trim()}\n`
+      }
+      p.textContent = t
+    }
+    f.addEventListener('input', u);
+    o.addEventListener('change', () => {
+      o.value === 'Y' ? rc.classList.remove('hidden') : (rc.classList.add('hidden'), roc.classList.add('hidden'), rs.value = '', roi.value = '');
+      u()
+    });
+    rs.addEventListener('change', () => {
+      rs.value === 'other' ? roc.classList.remove('hidden') : (roc.classList.add('hidden'), roi.value = '');
+      u()
+    });
+    c.addEventListener('click', () => {
+      if (p.textContent.trim()) {
+        let t = document.createElement('textarea');
+        t.value = p.textContent;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+        a('Notes copied!')
+      } else a('No notes to copy')
+    });
+
+    function a(m) {
+      const e = document.getElementById('custom-alert');
+      if (e) e.remove();
+      const b = document.createElement('div');
+      b.id = 'custom-alert';
+      b.className = 'fixed top-3 right-3 bg-orange-500 text-white px-4 py-2 rounded shadow text-sm';
+      b.textContent = m;
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 2000)
+    }
+    r.addEventListener('click', () => {
+      f.reset();
+      rc.classList.add('hidden');
+      roc.classList.add('hidden');
+      u()
+    });
+  </script>
 </body>
 
 </html>
